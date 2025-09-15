@@ -1,7 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use 
+use App\Http\Controllers\Auth\AdminAuthController;
+use App\Http\Controllers\Auth\MemberAuthController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -16,7 +17,6 @@ Route::post('admin/logout', [AdminAuthController::class, 'logout'])->name('admin
 Route::get('member/login', [MemberAuthController::class, 'show'])->name('member.login');
 Route::post('member/login', [MemberAuthController::class, 'login']);
 Route::post('member/logout', [MemberAuthController::class, 'logout'])->name('member.logout');
-
 
 Route::middleware('auth:admin')->group(function () {
     Route::get('/admin/dashboard', fn() => view('admin.dashboard'));
