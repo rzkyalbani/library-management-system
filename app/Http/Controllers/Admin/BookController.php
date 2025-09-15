@@ -11,9 +11,18 @@ class BookController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $books = Book::all();
+        $query = Book::query();
+
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->search;
+            $query->where('title', 'like', "%{$search}%")
+                ->orWhere('author', 'like', "%{$search}%");
+        }
+
+        $books = $query->paginate(10);
+
         return view('admin.books.index', compact('books'));
     }
 
@@ -55,7 +64,7 @@ class BookController extends Controller
     public function show(string $id)
     {
         $book = Book::findOrFail($id);
-        return view('admin.books.edit', compact('book'));
+        return view('admin.books.show', compact('book'));
     }
 
     /**
