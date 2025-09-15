@@ -28,7 +28,7 @@
             <div class="bg-white shadow-md rounded-lg p-6">
                 <h3 class="text-lg font-semibold mb-2">📖 Books</h3>
                 <p class="text-gray-600">Manage all books in the library catalog.</p>
-                <a href="#" class="text-blue-600 hover:underline mt-2 inline-block">Go to Books</a>
+                <a href="{{ route('admin.books.index') }}" class="text-blue-600 hover:underline mt-2 inline-block">Go to Books</a>
             </div>
 
             <!-- Card 2 -->

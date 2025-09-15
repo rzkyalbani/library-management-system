@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AdminAuthController;
 use App\Http\Controllers\Auth\MemberAuthController;
+use App\Http\Controllers\Admin\BookController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -22,12 +23,15 @@ Route::post('member/login', [MemberAuthController::class, 'login']);
 
 Route::post('member/logout', [MemberAuthController::class, 'logout'])->name('member.logout');
 
-// =================================================================================================
-
-Route::middleware('auth:admin')->group(function () {
-    Route::get('/admin/dashboard', fn() => view('admin.dashboard'));
+// Admin Routes
+Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function () {
+    Route::get('dashboard', fn() => view('admin.dashboard'))->name('dashboard');
+    Route::resource('books', BookController::class);
 });
 
+// Member Routes
 Route::middleware('auth:member')->group(function () {
     Route::get('/member/dashboard', fn() => view('member.dashboard'));
 })->name('member.dashboard');
+
+
