@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class BookSeeder extends Seeder
 {
@@ -12,7 +13,9 @@ class BookSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('books')->insert([
+        $faker = \Faker\Factory::create();
+
+        $books = [
             [
                 'title' => 'Clean Code',
                 'author' => 'Robert C. Martin',
@@ -55,6 +58,30 @@ class BookSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-        ]);
+        ];
+
+        // Generate 27 random books biar total 30
+        for ($i = 0; $i < 27; $i++) {
+            $total = $faker->numberBetween(1, 10);
+            $available = $faker->numberBetween(0, $total);
+
+            $books[] = [
+                'title' => $faker->sentence(3),
+                'author' => $faker->name(),
+                'publisher' => $faker->company(),
+                'isbn' => $faker->isbn13(),
+                'publication_year' => $faker->year(),
+                'category' => $faker->randomElement(['Programming', 'Computer Science', 'Mathematics', 'Literature', 'History']),
+                'total_copies' => $total,
+                'available_copies' => $available,
+                'is_digital' => $faker->boolean(30), // 30% kemungkinan digital
+                'digital_url' => $faker->boolean(30) ? $faker->url() : null,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+        }
+
+        DB::table('books')->insert($books);
     }
 }
+    
