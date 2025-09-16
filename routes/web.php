@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\AdminAuthController;
 use App\Http\Controllers\Auth\MemberAuthController;
 use App\Http\Controllers\Admin\BookController;
 use App\Http\Controllers\Admin\MemberController;
+use App\Http\Controllers\Admin\BorrowController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -29,8 +30,9 @@ Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function
     Route::get('dashboard', fn() => view('admin.dashboard'))->name('dashboard');
     Route::resource('books', BookController::class);
     Route::resource('members', MemberController::class);
-    Route::post('members/{member}/toggle-active', [MemberController::class, 'toggleActive'])
-    ->name('members.toggle-active');
+    Route::post('members/{member}/toggle-active', [MemberController::class, 'toggleActive'])->name('members.toggle-active');
+        Route::resource('borrows', BorrowController::class)->except(['edit', 'update']);
+    Route::post('borrows/{borrow}/return', [BorrowController::class, 'returnBook'])->name('borrows.return');
 });
 
 // Member Routes
