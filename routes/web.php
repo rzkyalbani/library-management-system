@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\MemberAuthController;
 use App\Http\Controllers\Admin\BookController;
 use App\Http\Controllers\Admin\MemberController;
 use App\Http\Controllers\Admin\BorrowController;
+use App\Http\Controllers\Admin\FineController;  
 
 Route::get('/', function () {
     return view('welcome');
@@ -28,11 +29,17 @@ Route::post('member/logout', [MemberAuthController::class, 'logout'])->name('mem
 // Admin Routes
 Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function () {
     Route::get('dashboard', fn() => view('admin.dashboard'))->name('dashboard');
+
     Route::resource('books', BookController::class);
+    
     Route::resource('members', MemberController::class);
     Route::post('members/{member}/toggle-active', [MemberController::class, 'toggleActive'])->name('members.toggle-active');
-        Route::resource('borrows', BorrowController::class)->except(['edit', 'update']);
+
+    Route::resource('borrows', BorrowController::class)->except(['edit', 'update']);
     Route::post('borrows/{borrow}/return', [BorrowController::class, 'returnBook'])->name('borrows.return');
+
+    Route::resource('fines', FineController::class);
+    Route::post('fines/{fine}/mark-as-paid', [FineController::class, 'markAsPaid'])->name('fines.markAsPaid');
 });
 
 // Member Routes
