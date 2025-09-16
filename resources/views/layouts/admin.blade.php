@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Library Admin</title>
+    <title>@yield('title', 'Library Admin')</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 min-h-screen">
+<body class="bg-gray-100 min-h-screen flex flex-col">
 
     <!-- Navbar -->
     <nav class="bg-blue-600 text-white px-6 py-4 flex justify-between items-center">
@@ -19,8 +19,8 @@
         </form>
     </nav>
 
-    <!-- Content -->
-    <main class="p-6">
+    <!-- Main Content -->
+    <main class="flex-1 p-6">
         @yield('content')
     </main>
 
