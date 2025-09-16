@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AdminAuthController;
 use App\Http\Controllers\Auth\MemberAuthController;
 use App\Http\Controllers\Admin\BookController;
+use App\Http\Controllers\Admin\MemberController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -27,11 +28,14 @@ Route::post('member/logout', [MemberAuthController::class, 'logout'])->name('mem
 Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function () {
     Route::get('dashboard', fn() => view('admin.dashboard'))->name('dashboard');
     Route::resource('books', BookController::class);
+    Route::resource('members', MemberController::class);
+    Route::post('members/{member}/toggle-active', [MemberController::class, 'toggleActive'])
+    ->name('members.toggle-active');
 });
 
 // Member Routes
-Route::middleware('auth:member')->group(function () {
-    Route::get('/member/dashboard', fn() => view('member.dashboard'));
-})->name('member.dashboard');
+Route::middleware('auth:member')->prefix('member')->name('member.')->group(function () {
+    Route::get('/member/dashboard', fn() => view('member.dashboard'))->name('dashboard');
+});
 
 
