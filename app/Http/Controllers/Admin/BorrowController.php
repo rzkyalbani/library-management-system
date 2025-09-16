@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Borrow;
 use App\Models\Member;
 use App\Models\Book;
+use App\Models\Fine;
 
 class BorrowController extends Controller
 {
@@ -115,15 +116,19 @@ class BorrowController extends Controller
         $borrow->book->increment('available_copies');
 
         // Hitung denda
-        // if ($borrow->return_date->gt($borrow->due_date)) {
-        //     $daysLate = $borrow->return_date->diffInDays($borrow->due_date);
-        //     FINE::create([
-        //         'borrow_id' => $borrow->id,
-        //         'amount' => $daysLate * 10000,
-        //         'fine_date' => now(),
-        //         'is_paid' => false,
-        //     ]);
-        // }
+        $dueDate = $borrow->due_date ?? $borrow->borrow_date->copy()->addDays(7);
+
+        if ($borrow->return_date->gt($dueDate)) {
+            $daysLate = $borrow->return_date->diffInDays($dueDate);
+            $amount = $daysLate * 5000;
+
+            Fine::create([
+                'borrow_id' => $borrow->id,
+                'amount' => $amount,
+                'fine_date' => now(),
+                'is_paid' => false,
+            ]);
+        }
 
         return back()->with('success', 'Book returned successfully.');
     }

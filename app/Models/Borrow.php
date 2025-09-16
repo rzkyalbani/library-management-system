@@ -33,8 +33,8 @@ class Borrow extends Model
         return $this->belongsTo(Book::class);
     }
 
-    public function fines()
+    public function fine()
     {
-        return $this->hasMany(Fine::class);
+        return $this->hasOne(Fine::class);
     }
 }
