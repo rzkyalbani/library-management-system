@@ -49,7 +49,7 @@ class BookController extends Controller
             'total_copies' => 'required|integer|min:1',
             'available_copies' => 'required|integer|min:0',
             'is_digital' => 'boolean',
-            'digital_url' => 'nullable|url',
+            'digital_url' => 'required_if:is_digital,true|nullable|url',
         ]);
 
         Book::create($request->all());
@@ -93,7 +93,7 @@ class BookController extends Controller
             'total_copies' => 'required|integer|min:1',
             'available_copies' => 'required|integer|min:0',
             'is_digital' => 'boolean',
-            'digital_url' => 'nullable|url',
+            'digital_url' => 'required_if:is_digital,true|nullable|url',
         ]);
 
         $book->update($request->all());
@@ -112,5 +112,19 @@ class BookController extends Controller
 
         return redirect()->route('admin.books.index')
                         ->with('success', 'Book deleted successfully.');
+    }
+
+    public function digitalIndex(Request $request)
+    {
+        $query = Book::where('is_digital', true);
+        
+        if ($request->has('search')) {
+            $search = $request->search;
+            $query->where('title', 'like', "%{$search}%")
+                ->orWhere('author', 'like', "%{$search}%");
+        }
+        
+        $books = $query->paginate(10);
+        return view('admin.books.digital', compact('books'));
     }
 }

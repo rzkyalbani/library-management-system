@@ -31,6 +31,7 @@ Route::post('member/logout', [MemberAuthController::class, 'logout'])->name('mem
 Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function () {
     Route::get('dashboard', fn() => view('admin.dashboard'))->name('dashboard');
 
+    Route::get('books/digital', [BookController::class, 'digitalIndex'])->name('books.digital');
     Route::resource('books', BookController::class);
 
     Route::resource('members', MemberController::class);
