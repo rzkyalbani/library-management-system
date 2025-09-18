@@ -47,11 +47,22 @@
                         </td>
                         <td class="px-4 py-2 flex gap-2">
                             <a href="{{ route('admin.reservations.show', $reservation) }}" 
-                               class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded">
+                            class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded">
                                 View
                             </a>
+
+                            @if($reservation->status === 'pending')
+                                <form action="{{ route('admin.reservations.pickup', $reservation) }}" method="POST">
+                                    @csrf
+                                    @method('PATCH')
+                                    <button type="submit" class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded">
+                                        Mark as Picked Up
+                                    </button>
+                                </form>
+                            @endif
+
                             <form action="{{ route('admin.reservations.destroy', $reservation) }}" method="POST" 
-                                  onsubmit="return confirm('Are you sure you want to delete this reservation?')">
+                                onsubmit="return confirm('Are you sure you want to delete this reservation?')">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded">
