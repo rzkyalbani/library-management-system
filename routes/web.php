@@ -43,6 +43,8 @@ Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function
     Route::post('fines/{fine}/mark-as-paid', [FineController::class, 'markAsPaid'])->name('fines.markAsPaid');
 
     Route::resource('reservations', ReservationController::class);
+    Route::patch('reservations/{reservation}/pickup', [ReservationController::class, 'markAsPickedUp'])
+    ->name('reservations.pickup');
 });
 
 // Member Routes

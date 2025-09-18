@@ -28,7 +28,7 @@ class ReservationController extends Controller
     public function create()
     {
         $members = Member::all();
-        $books = Book::all();
+        $books = Book::where('available_copies', '=', 0)->get();
 
         return view('admin.reservations.create', compact('members', 'books'));
     }
@@ -89,5 +89,27 @@ class ReservationController extends Controller
         $reservation->delete();
         return redirect()->route('admin.reservations.index')
             ->with('success', 'Reservation deleted successfully.');
+    }
+
+    public function markAsPickedUp(Reservation $reservation)
+    {
+        if ($reservation->status !== 'pending') {
+            return back()->withErrors('Only pending reservations can be marked as picked up.');
+        }
+
+        $reservation->status = 'picked_up';
+        $reservation->save();
+
+        $borrow = Borrow::create([
+            'member_id' => $reservation->member_id,
+            'book_id' => $reservation->book_id,
+            'borrow_date' => now(),
+            'due_date' => now()->addDays(7),
+        ]);
+
+        // Kurangi stok buku
+        $reservation->book->decrement('available_copies');
+
+        return back()->with('success', "Reservation marked as picked up and borrow #{$borrow->id} created.");
     }
 }
