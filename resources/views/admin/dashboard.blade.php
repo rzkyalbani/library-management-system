@@ -31,7 +31,7 @@
     <div class="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition">
         <h3 class="text-lg font-semibold mb-2">📌 Reservations</h3>
         <p class="text-gray-600 mb-2">Track and approve book reservations.</p>
-        <a href="#" class="text-blue-600 hover:underline font-medium">Go to Reservations</a>
+        <a href="{{ route('admin.reservations.index') }}" class="text-blue-600 hover:underline font-medium">Go to Reservations</a>
     </div>
 
     <!-- Fines Card -->
